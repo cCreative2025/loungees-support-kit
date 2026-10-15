@@ -5,8 +5,8 @@ import { SupportError } from "../client";
 import type { SupportItem } from "../types";
 import { defaultTheme, koStrings, type SupportStrings, type SupportTheme } from "./theme";
 
-// 내 문의 목록 상태 — 화면이 열릴 때 1회 + reload()
-export function useMyInquiries(client: SupportClient) {
+// 내 문의 목록 상태 — autoLoad 면 마운트 때 1회, 그 외엔 reload() 로만
+export function useMyInquiries(client: SupportClient, autoLoad = true) {
   const [items, setItems] = useState<SupportItem[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -24,8 +24,8 @@ export function useMyInquiries(client: SupportClient) {
   }, [client]);
 
   useEffect(() => {
-    reload();
-  }, [reload]);
+    if (autoLoad) reload();
+  }, [autoLoad, reload]);
 
   return { items, error, refreshing, reload };
 }
@@ -39,8 +39,12 @@ type Props = {
   locale?: string;
   style?: StyleProp<ViewStyle>;
   ListHeaderComponent?: ReactElement | null;
-  /** 화면 포커스 때 다시 불러오려면 여기에 증가하는 값을 넘긴다 (expo-router useFocusEffect 등) */
-  reloadKey?: unknown;
+  /**
+   * 화면에 들어올 때마다 불러오려면 넘긴다 (expo-router useFocusEffect 로 1, 2, 3… 증가).
+   * 넘기면 마운트 자동 조회는 하지 않고 이 값이 null/undefined 가 아닐 때마다 1회 조회 → 진입당 정확히 1번.
+   * 안 넘기면 마운트 때 1회.
+   */
+  reloadKey?: number | string | null;
 };
 
 const fmt = (iso: string, locale: string) =>
@@ -50,12 +54,13 @@ const fmt = (iso: string, locale: string) =>
 export function MyInquiries({ client, operatorName, theme, strings, locale = "ko-KR", style, ListHeaderComponent, reloadKey }: Props) {
   const t = { ...defaultTheme, ...theme };
   const s = { ...koStrings, ...strings };
-  const { items, error, refreshing, reload } = useMyInquiries(client);
+  const managed = reloadKey !== undefined;
+  const { items, error, refreshing, reload } = useMyInquiries(client, !managed);
   const font = t.fontFamily ? { fontFamily: t.fontFamily } : null;
   const bold = t.fontFamilyBold ? { fontFamily: t.fontFamilyBold } : { fontWeight: "700" as const };
 
   useEffect(() => {
-    if (reloadKey !== undefined) reload();
+    if (reloadKey != null) reload();
   }, [reloadKey, reload]);
 
   if (!items && !error) {

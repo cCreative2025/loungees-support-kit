@@ -1,6 +1,6 @@
 {
   "name": "@loungees/support-kit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "라운지스 앱 공용 문의 블록 — 문의·기능 요청·버그 신고 보내기 + 내 문의(답장) 보기. 라운지스 오피스 Support API 클라이언트",
   "license": "MIT",
   "main": "src/index.ts",
