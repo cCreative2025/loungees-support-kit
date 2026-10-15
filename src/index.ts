@@ -9,7 +9,8 @@
  *
  * 2) React Native 화면 블록
  *    import { InquiryForm, MyInquiries } from "@loungees/support-kit/native";
- *    <InquiryForm client={support} onSent={() => router.push("/my-inquiries")} />
+ *    문의하기(답장 받음):          <InquiryForm client={support} onSent={() => router.push("/my-inquiries")} />
+ *    업데이트 요청·버그 제보(끝): <InquiryForm client={support} mode="request" />
  *    <MyInquiries client={support} operatorName="키팝" reloadKey={focusCount} />  // 진입마다 1회 + 당겨서 새로고침
  *      (expo-router: const [n, setN] = useState<number | null>(null); useFocusEffect(useCallback(() => setN((x) => (x ?? 0) + 1), [])))
  *    색·글꼴은 theme, 문구는 strings 로 앱에 맞춘다.

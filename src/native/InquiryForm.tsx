@@ -7,7 +7,12 @@ import { defaultTheme, koStrings, type SupportStrings, type SupportTheme } from 
 
 type Props = {
   client: SupportClient;
-  /** 고를 수 있는 종류 (기본: 문의·기능 요청·버그 신고). 하나만 주면 선택 칩을 숨긴다 */
+  /**
+   * inquiry(기본) = 문의하기 — 답장이 '내 문의'로 온다
+   * request       = 업데이트 요청·버그 제보 — 보내고 끝 (목록·답장 없음)
+   */
+  mode?: "inquiry" | "request";
+  /** request 모드에서 고를 종류 (기본: 기능 요청·버그 신고). 하나만 주면 선택 칩을 숨긴다 */
   kinds?: SupportKind[];
   defaultKind?: SupportKind;
   onSent?: (id: string, kind: SupportKind) => void;
@@ -17,8 +22,9 @@ type Props = {
   maxLength?: number;
 };
 
-// 문의 보내기 — 종류 칩 + 여러 줄 입력 + 보내기. 보내면 입력을 비우고 onSent 호출
-export function InquiryForm({ client, kinds = ["inquiry", "feature", "bug"], defaultKind, onSent, theme, strings, style, maxLength = 1000 }: Props) {
+// 보내기 폼 — (요청 모드면 종류 칩) + 여러 줄 입력 + 보내기. 보내면 입력을 비우고 onSent 호출
+export function InquiryForm({ client, mode = "inquiry", kinds: kindsProp, defaultKind, onSent, theme, strings, style, maxLength = 1000 }: Props) {
+  const kinds: SupportKind[] = mode === "inquiry" ? ["inquiry"] : (kindsProp ?? ["feature", "bug"]).filter((k) => k !== "inquiry");
   const t = { ...defaultTheme, ...theme };
   const s = { ...koStrings, ...strings };
   const [kind, setKind] = useState<SupportKind>(defaultKind ?? kinds[0]);
@@ -35,7 +41,7 @@ export function InquiryForm({ client, kinds = ["inquiry", "feature", "bug"], def
     try {
       const { id } = await client.send({ kind, body: body.trim() });
       setBody("");
-      setMessage({ text: s.sent, error: false });
+      setMessage({ text: mode === "inquiry" ? s.sent : s.requestSent, error: false });
       onSent?.(id, kind);
     } catch (e) {
       setMessage({ text: e instanceof SupportError ? e.message : s.loadFailed, error: true });

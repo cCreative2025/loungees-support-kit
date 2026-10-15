@@ -38,7 +38,10 @@ export type SupportStrings = {
   placeholder: Record<SupportKind, string>;
   send: string;
   sending: string;
+  /** 문의 보낸 뒤 (답장은 내 문의에서) */
   sent: string;
+  /** 업데이트 요청·버그 제보 보낸 뒤 (보내고 끝) */
+  requestSent: string;
   tooShort: string;
   mine: string;
   /** "{name} 답변" */
@@ -61,6 +64,7 @@ export const koStrings: SupportStrings = {
   send: "보내기",
   sending: "보내는 중…",
   sent: "보냈어요. 답변은 '내 문의'에서 확인할 수 있어요",
+  requestSent: "전달됐어요. 고마워요!",
   tooShort: "내용을 2자 이상 적어주세요",
   mine: "내 문의",
   replyFrom: (op) => `${op} 답변`,
@@ -82,6 +86,7 @@ export const enStrings: SupportStrings = {
   send: "Send",
   sending: "Sending…",
   sent: "Sent! Check replies in My inquiries",
+  requestSent: "Sent. Thank you!",
   tooShort: "Please write at least 2 characters",
   mine: "My inquiries",
   replyFrom: (op) => `Reply from ${op}`,

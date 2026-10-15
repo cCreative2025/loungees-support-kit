@@ -50,7 +50,7 @@ type Props = {
 const fmt = (iso: string, locale: string) =>
   new Date(iso).toLocaleString(locale, { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
-// 내 문의 — 채팅이 아니라 메일처럼: 내 문의 카드 아래에 답변 블록
+// 내 문의 — 채팅이 아니라 메일처럼: 내 문의 카드 아래에 답변 블록 (문의만. 업데이트 요청·버그 제보는 보내고 끝)
 export function MyInquiries({ client, operatorName, theme, strings, locale = "ko-KR", style, ListHeaderComponent, reloadKey }: Props) {
   const t = { ...defaultTheme, ...theme };
   const s = { ...koStrings, ...strings };
@@ -99,9 +99,7 @@ export function MyInquiries({ client, operatorName, theme, strings, locale = "ko
         <View style={[styles.card, { backgroundColor: t.card, borderRadius: t.radius, borderColor: t.border }]}>
           {/* 내 문의 */}
           <View style={styles.head}>
-            <Text style={[styles.headTitle, bold, { color: t.text }]}>
-              {s.mine} · {s.kinds[item.kind]}
-            </Text>
+            <Text style={[styles.headTitle, bold, { color: t.text }]}>{s.mine}</Text>
             <Text style={[styles.badge, font, { color: item.state === "answered" ? t.reply : t.subtext, borderColor: item.state === "answered" ? t.reply : t.border }]}>
               {s.states[item.state]}
             </Text>
