@@ -1,0 +1,21 @@
+{
+  "name": "@loungees/support-kit",
+  "version": "0.1.0",
+  "description": "라운지스 앱 공용 문의 블록 — 문의·기능 요청·버그 신고 보내기 + 내 문의(답장) 보기. 라운지스 오피스 Support API 클라이언트",
+  "license": "MIT",
+  "main": "src/index.ts",
+  "react-native": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./native": "./src/native/index.ts"
+  },
+  "files": ["src"],
+  "peerDependencies": {
+    "react": ">=18",
+    "react-native": ">=0.74"
+  },
+  "peerDependenciesMeta": {
+    "react-native": { "optional": true }
+  }
+}
